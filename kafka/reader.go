@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+	"errors"
 	"github.com/segmentio/kafka-go"
 	"log"
 )
@@ -33,6 +34,21 @@ func (k *Reader) FetchMessage(ctx context.Context, messages chan<- kafka.Message
 		case <-ctx.Done():
 		case messages <- message:
 			log.Printf("message fetched and sent to a channel: %v\n", string(message.Value))
+		}
+	}
+}
+
+func (k *Reader) CommitMessages(ctx context.Context, messageCommitChan <-chan kafka.Message) error {
+	for {
+		select {
+		case <-ctx.Done():
+		case msg := <-messageCommitChan:
+			err := k.Reader.CommitMessages(ctx, msg)
+			if err != nil {
+				return errors.Unwrap(err)
+			}
+
+			log.Printf("committed a msg: %v\n", string(msg.Value))
 		}
 	}
 }
