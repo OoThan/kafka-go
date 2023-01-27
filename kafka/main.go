@@ -1,16 +1,15 @@
-package main
+package kafka
 
 import (
 	"context"
 	kafkago "github.com/segmentio/kafka-go"
 	"golang.org/x/sync/errgroup"
-	"kafka-go/kafka"
 	"log"
 )
 
 func main() {
-	reader := kafka.NewKafkaReader()
-	writer := kafka.NewKafkaWriter()
+	reader := NewKafkaReader()
+	writer := NewKafkaWriter()
 
 	ctx := context.Background()
 	messages := make(chan kafkago.Message, 1000)

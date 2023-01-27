@@ -3,16 +3,16 @@ package kafka
 import (
 	"context"
 	"errors"
-	"github.com/segmentio/kafka-go"
+	kafkago "github.com/segmentio/kafka-go"
 	"log"
 )
 
 type Reader struct {
-	Reader *kafka.Reader
+	Reader *kafkago.Reader
 }
 
 func NewKafkaReader() *Reader {
-	reader := kafka.NewReader(kafka.ReaderConfig{
+	reader := kafkago.NewReader(kafkago.ReaderConfig{
 		Brokers: []string{"localhost:9092"},
 		Topic:   "kafka_test",
 		GroupID: "kafka_group",
@@ -23,7 +23,7 @@ func NewKafkaReader() *Reader {
 	}
 }
 
-func (k *Reader) FetchMessage(ctx context.Context, messages chan<- kafka.Message) error {
+func (k *Reader) FetchMessage(ctx context.Context, messages chan<- kafkago.Message) error {
 	for {
 		message, err := k.Reader.FetchMessage(ctx)
 		if err != nil {
@@ -38,7 +38,7 @@ func (k *Reader) FetchMessage(ctx context.Context, messages chan<- kafka.Message
 	}
 }
 
-func (k *Reader) CommitMessages(ctx context.Context, messageCommitChan <-chan kafka.Message) error {
+func (k *Reader) CommitMessages(ctx context.Context, messageCommitChan <-chan kafkago.Message) error {
 	for {
 		select {
 		case <-ctx.Done():
