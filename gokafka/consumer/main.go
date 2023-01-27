@@ -27,7 +27,7 @@ func main() {
 
 func NewKafkaConsumer() *kafka.Consumer {
 	configMap := &kafka.ConfigMap{
-		"bootstrap.servers": "gokafka_kafka_1:9092",
+		"bootstrap.servers": "localhost:9092",
 		"client.id":         "goapp_consumer",
 		"group.id":          "goapp_group",
 	}
